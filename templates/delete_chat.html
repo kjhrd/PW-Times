@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Delete Chat</h1>
+<form method="POST" action="{{ url_for('delete_chat') }}">
+    {{ form.hidden_tag() }}
+    {{ form.chat_id.label }} {{ form.chat_id() }}<br>
+    {{ form.check.label }} {{ form.check() }}<br>
+    {{ form.submit() }}
+</form>
+{% endblock %}

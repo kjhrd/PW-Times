@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Добро пожаловать на официальный сайт PW Times</h1>
+<a id="action_b" class="button" href="{{ url_for('create_chat') }}">Написать статью</a>
+<a id="action_b" class="button" href="{{ url_for('delete_chat') }}">Удалить вашу статью</a>
+<br><br><br><br>
+<div class="chats">
+<h2>Статьи:</h2>
+<br>
+{% for chat_id, chat in chats.items() %}
+    <a class="button" href="{{ url_for('chat', chat_id=chat_id) }}">{{ chat.name|safe }}</a>
+{% endfor %}
+</div>
+</ul>
+{% endblock %}

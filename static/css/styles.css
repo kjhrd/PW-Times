@@ -1,0 +1,169 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #444;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+    background-color: #444;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    word-break: break-all;
+    overflow-x: reverse;
+    flex-wrap: wrap
+}
+
+ul li {
+    background-color: #555;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #666;
+    word-break: break-all;
+}
+
+form {
+    margin-top: 20px;
+    background-color: #444;
+}
+
+form input, form textarea, form button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+form input, form textarea {
+    padding: 10px;
+    border: 1px solid #666;
+    background-color: #555;
+    color: white;
+}
+
+form button {
+    padding: 10px;
+    background-color: #8B0A0A; /* Red */
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#messages {
+    max-height: 300px;
+    overflow-y: scroll;
+    margin-bottom: 20px;
+    background-color: #444;
+}
+
+pre {
+    word-break: break-all;
+    white-space: pre-wrap; /* или white-space: normal; */
+    background-color: #555;
+    color: white;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #8B0A0A; /* Red */
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #A70000; /* Darker red */
+}
+
+.button:active {
+    background-color: #8B0A0A; /* Red */
+}
+
+.button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(139, 10, 10, 0.5); /* Red glow */
+}
+
+.chats {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    /* margin-bottom: 10px; */
+    background-color: #444;
+}
+
+.chats a {
+    margin-bottom: 10px; /* Добавляет отступ между ссылками */
+    color: white;
+}
+
+.chats a:not(:last-child) {
+    margin-bottom: 10px; /* Добавляет отступ только между ссылками, избегая последней */
+}
+
+.footer {
+  background-color: #333;
+   right: 0;
+   bottom: 0;
+   text-align: center;
+   width: 99%;
+   font-size: 19px;
+   font-weight: bold;
+   color: white;
+   padding: 20px;
+}
+p {
+    font-size: 24px;
+    color: #999
+}
+
+@media only screen and (max-width: 768px) {
+  /* Styles for mobile devices */
+  body { font-size: 18px; }
+  header { padding: 5px 0; }
+  nav a { margin: 0 5px; }
+  main { padding: 10px; }
+  ul { flex-wrap: wrap; }
+  ul li { margin-bottom: 5px; }
+  form { margin-top: 10px; }
+  form input, form textarea, form button { width: 100%; margin-bottom: 5px; }
+  #messages { max-height: 200px; }
+ .button { padding: 5px 10px; font-size: 14px; }
+ .chats { flex-direction: column; align-content: center; }
+  footer { width: 95%; font-size: 16px; }
+}
+
+@media only screen and (max-width: 480px) {
+  /* Styles for smaller mobile devices */
+  body { font-size: 16px; }
+  header { padding: 2px 0; }
+  nav a { margin: 0 2px; }
+  main { padding: 5px; }
+  ul { flex-wrap: wrap; }
+  ul li { margin-bottom: 2px; }
+  form { margin-top: 5px; }
+  form input, form textarea, form button { width: 100%; margin-bottom: 2px; }
+  #messages { max-height: 150px; }
+ .button { padding: 2px

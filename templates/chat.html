@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ name|safe }}</h1>
+<p style="white-space: pre-wrap;">{{ text|safe }}</p>
+<em>Статью написал {{ chat.owner }}</em>
+<br>
+<p>Коментарии:</p>
+<ul id="messages" style="list-style-type: none; max-height: 500px; overflow-y: auto; word-break: break-all; overflow-x: visible;">
+    {% for message in messages %}
+        <li>
+            <strong class="copy-item">{{ message.user }}</strong>:
+            <pre style="display: inline; font-size: 1rem; color: black;">{{ message.content|safe }}</pre>
+            <em>({{ message.timestamp }})</em>
+        </li>
+    {% endfor %}
+</ul>
+<script>
+        // Получаем элементы списка и элемент для статуса
+        const listItems = document.querySelectorAll('#messages li');
+        const statusElement = document.getElementById('copyStatus');
+
+        // Функция для копирования текста
+        function copyText(event) {
+            // Получаем текст из элемента списка
+            const textToCopy = event.target.innerText;
+
+            // Создаем временный элемент для копирования текста
+            const tempInput = document.createElement('input');
+            tempInput.value = textToCopy;
+            document.body.appendChild(tempInput);
+            
+            // Выделяем текст в временном элементе и копируем его
+            tempInput.select();
+            document.execCommand('copy');
+            
+            // Удаляем временный элемент
+            document.body.removeChild(tempInput);
+        }
+
+        // Добавляем обработчик события клика к каждому элементу списка
+        listItems.forEach(item => {
+            item.addEventListener('click', copyText);
+        });
+    </script>
+<form id="messageForm">
+    {{ form.hidden_tag() }}
+    {{ form.content.label }} {{ form.content(id="messageInput", rows="3") }}<br>
+    <button type="submit">Send Message</button>
+</form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    window.onload = function() {	
+        const socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+        const room = "{{ chat_id }}";
+        const username = "{{ current_user.username }}";
+
+        socket.emit('join_room', { username: username, room: room });
+
+        const messageForm = document.getElementById('messageForm');
+        const messageInput = document.getElementById('messageInput');
+        const messages = document.getElementById('messages');
+
+        // Автоскролл вниз при добавлении нового сообщения
+        const scrollToBottom = () => {
+            messages.scrollTop = messages.scrollHeight;
+        };
+
+        // Автоскролл при загрузке страницы
+        scrollToBottom();
+
+        messageForm.onsubmit = (e) => {
+            e.preventDefault();
+            let message = messageInput.value;
+            if (message.trim() !== '') {
+                socket.emit('send_message', { username: username, room: room, message: message });
+                messageInput.value = '';
+                messageInput.focus();
+            }
+        };
+
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                messageForm.onsubmit(e);
+            } else if (e.key === 'Enter' && e.shiftKey) {
+                // Позволяет переход на следующую строку при нажатии Shift+Enter
+                messageInput.value += '\n';
+            }
+        });
+
+        socket.on('receive_message', (data) => {
+            const li = document.createElement('li');
+            li.innerHTML = `<strong>${data.username}</strong>: <pre style="display: inline; font-size: 1rem; color: black;">${data.message}</pre> <em>(${new Date().toLocaleTimeString()})</em>`;
+            messages.appendChild(li);
+            scrollToBottom();
+        });
+
+        window.addEventListener('beforeunload', () => {
+            socket.emit('leave_room', { username: username, room: room });
+        });
+    };
+</script>
+{% endblock %}

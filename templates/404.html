@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>PW Times - Страница не найдена</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </nav>
+    </header>
+    <main>
+        <h1>Страница не найдена</h1>
+        <p>К сожалению, страница, которую вы ищете, не найдена.</p>
+        <p>Вероятно, она была удалена или перемещена.</p>
+        <p>Вы можете вернуться на <a class="button" href="{{ url_for('index') }}">главную страницу</a>.</p>
+    </main>
+    <footer>
+        <p>Со всеми вопросами и просьбами обращаться к @kjhrd</p>
+    </footer>
+</body>
+</html>

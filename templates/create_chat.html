@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Create New Article</h1>
+<form method="POST" action="{{ url_for('create_chat') }}">
+    {{ form.hidden_tag() }}
+    {{ form.name.label }} {{ form.name() }}<br>
+    {{ form.article.label }} {{ form.article(rows="3") }}
+    {{ form.submit() }}
+</form>
+{% endblock %}

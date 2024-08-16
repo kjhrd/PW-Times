@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>ADMIN PAGE</h1>
+    <h2>Delete Chat</h2>
+    <input type="text" id="userInput" placeholder="Введите ваш ID">
+    <a id="generateLink" class="button" href="#" target="_blank">Delete</a>
+
+    <script>
+        // Получаем элементы
+        const input = document.getElementById('userInput');
+        const link = document.getElementById('generateLink');
+
+        // Добавляем обработчик события для изменения текста в input
+        input.addEventListener('input', function() {
+            // Получаем значение из input
+            const userId = input.value;
+
+            // Создаем ссылку
+            const url = `{{ url_for('delete_chat') }}?id=${userId}&url=admin_page`;
+
+            // Устанавливаем атрибут href для ссылки
+            link.href = url;
+        });
+    </script>
+    <br><br><br><br><br><br>
+
+    <form method="POST" action="{{ url_for('admin_page') }}">
+        {{ form.hidden_tag() }}
+        {{ form.username.label }} {{ form.username() }}<br>
+        {{ form.submit() }}
+    </form>
+{% endblock %}

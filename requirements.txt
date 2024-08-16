@@ -1,0 +1,7 @@
+flask
+Flask-Login
+Flask-Limiter
+markdown
+Flask-WTF
+Flask-SocketIO
+WTForms

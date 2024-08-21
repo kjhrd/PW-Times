@@ -32,7 +32,12 @@
 
     <h2>Информация</h2>
     <p>Пользователей онлайн:{{ user_l }}</p>
-    <ul>
-
-    </ul>
+    <p>Пользователи онлайн:</p>
+    {% for user_id, user in userso.items() %}
+        <p>{{ chat.username|safe }} : {{ user_id }}</p>
+    {% endfor %}
+    <p>Пользователи:</p>
+    {% for user_id, user in users.items() %}
+        <p>{{ chat.username|safe }} : {{ user_id }}</p>
+    {% endfor %}
 {% endblock %}

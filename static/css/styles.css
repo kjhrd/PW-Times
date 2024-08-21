@@ -1,12 +1,12 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #444;
+    background-color: #444444;
     margin: 0;
     padding: 0;
 }
 
 header {
-    background-color: #333;
+    background-color: #333333;
     color: white;
     padding: 10px 0;
     text-align: center;
@@ -20,7 +20,8 @@ nav a {
 
 main {
     padding: 20px;
-    background-color: #444;
+    background-color: #444444;
+    overflow-x: hidden;
 }
 
 ul {
@@ -29,6 +30,10 @@ ul {
     word-break: break-all;
     overflow-x: reverse;
     flex-wrap: wrap
+}
+
+h1 {
+    color: #aaa;
 }
 
 ul li {
@@ -70,6 +75,8 @@ form button {
     overflow-y: scroll;
     margin-bottom: 20px;
     background-color: #444;
+    scrollbar-width: 10px;
+    scrollbar-color: #aa1111 #888;
 }
 
 pre {
@@ -123,8 +130,9 @@ pre {
     margin-bottom: 10px; /* Добавляет отступ только между ссылками, избегая последней */
 }
 
-.footer {
+footer {
   background-color: #333;
+  position: fixed;
    right: 0;
    bottom: 0;
    text-align: center;
@@ -135,7 +143,6 @@ pre {
 }
 p {
     font-size: 24px;
-    color: #999
 }
 
 @media only screen and (max-width: 768px) {
@@ -165,4 +172,143 @@ p {
   form { margin-top: 5px; }
   form input, form textarea, form button { width: 100%; margin-bottom: 2px; }
   #messages { max-height: 150px; }
- .button { padding: 2px
+  .button { padding: 2px; }
+}
+
+.div1 {
+    display: inline;
+}
+
+.pon {
+    white-space: pre-wrap;
+    color: #999;
+    background-color: #222222;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 50px;
+    padding-left: 20px;
+    line-height: 2;
+}
+
+.pon p {
+    margin: 0px;
+}
+
+main {
+    min-height: 100%
+}
+
+.art {
+    border-radius: 10px;
+    border-bottom-right-radius: 50px;
+    background-color: #333333;
+    margin-bottom: 10px;
+}
+
+.comm {
+    background-color: #333333;
+}
+
+#messages::-webkit-scrollbar {
+  width: 10px;
+  background-color: #888;
+  border-radius: 5px;
+}
+
+#messages::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #aa1111;
+  height: 10px;
+}
+
+#messages::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  background-color: #888;
+}
+
+.part {
+    position: relative;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.part a{
+   margin: 0;
+   position: absolute;
+   top: 50%;
+   transform: translate(0, -50%);
+   color: #aa1111;
+}
+
+.part img{
+    margin-right: 10px;
+}
+
+.part p{
+   margin: 0;
+   position: absolute;
+   top: 50%;
+   transform: translate(0, -50%);
+   color: #aa1111;
+}
+
+html::-webkit-scrollbar {
+  width: 10px;
+  background-color: #888;
+  border-radius: 5px;
+}
+
+html::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #aa1111;
+  height: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  background-color: #888;
+}
+
+html::-moz-scrollbar {
+  width: 10px;
+  background-color: #888;
+  border-radius: 5px;
+}
+
+html::-moz-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #aa1111;
+  height: 10px;
+}
+
+html::-moz-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  background-color: #888;
+}
+
+#messages::-moz-scrollbar {
+  width: 10px;
+  background-color: #888;
+  border-radius: 5px;
+}
+
+#messages::-moz-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #aa1111;
+  height: 10px;
+}
+
+#messages::-moz-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  background-color: #888;
+}
+
+html {
+    scrollbar-width: 10px;
+    scrollbar-color: #aa1111 #888;
+}

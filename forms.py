@@ -29,3 +29,7 @@ class DeleteChatForm(FlaskForm):
 class BanUser(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     submit = SubmitField('BAN!')
+
+class Pre(FlaskForm):
+    check = BooleanField('Нажмите если хотите чтоб статья вышла')
+    submit = SubmitField('Отправить')

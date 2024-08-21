@@ -1,18 +1,15 @@
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from werkzeug.utils import secure_filename
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask_socketio import SocketIO, emit, join_room, leave_room
-import json, uuid
-import os
-from forms import LoginForm, RegisterForm, ChatForm, MessageForm, DeleteChatForm, BanUser
-from datetime import datetime
-import markdown
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_session import Session
-
-
+from forms import LoginForm, RegisterForm, ChatForm, MessageForm, DeleteChatForm, BanUser, Pre
+import markdown
+from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
+import json, uuid, time, os, threading, schedule
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'aboba'
@@ -24,6 +21,7 @@ socketio = SocketIO(app)
 
 active_users = {}
 
+
 @app.before_request
 def before_request():
     # Удаляем сессию, если она не активна
@@ -34,6 +32,7 @@ def before_request():
     if 'user_id' in session and session['user_id'] not in active_users:
         active_users[session['user_id']] = request.remote_addr
 
+
 @app.after_request
 def after_request(response):
     # Удаляем пользователя из списка активных, если он покидает сайт
@@ -42,57 +41,78 @@ def after_request(response):
             active_users.pop(session['user_id'], None)
     return response
 
+
 limiter = Limiter(
     get_remote_address,
     app=app,
     default_limits=["200 per day", "50 per hour"],
     storage_uri="memory://",
 )
-admin = ["kjhrd"]
+admin = ["kjhrd", "gbkjn"]
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
 
 # Load users
 def load_users():
     with open('data/users.json', 'r') as file:
         return json.load(file)
 
+
 # Save users
 def save_users(users):
     with open('data/users.json', 'w') as file:
         json.dump(users, file, indent=4)
+
+
+def load_pre():
+    with open('data/pre.json', 'r') as file:
+        return json.load(file)
+
+
+# Save users
+def save_pre(pre):
+    with open('data/pre.json', 'w') as file:
+        json.dump(pre, file, indent=4)
+
 
 # Load blacklist
 def load_blacklist():
     with open('data/blacklist.json', 'r') as file:
         return json.load(file)
 
+
 # Save blacklist
 def save_blacklist(users):
     with open('data/blacklist.json', 'w') as file:
         json.dump(users, file, indent=4)
+
 
 # Load chats
 def load_chats():
     with open('data/chats.json', 'r') as file:
         return json.load(file)
 
+
 # Save chats
 def save_chats(chats):
     with open('data/chats.json', 'w') as file:
         json.dump(chats, file, indent=4)
+
 
 # Load messages
 def load_messages():
     with open('data/messages.json', 'r') as file:
         return json.load(file)
 
+
 # Save messages
 def save_messages(messages):
     with open('data/messages.json', 'w') as file:
         json.dump(messages, file, indent=4)
+
 
 # User class
 class User(UserMixin):
@@ -100,6 +120,11 @@ class User(UserMixin):
         self.id = id
         self.username = username
         self.password = password
+
+
+@app.route('/part')
+def part():
+    return render_template('part.html')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -109,6 +134,36 @@ def load_user(user_id):
         return User(id=user_id, username=user['username'], password=user['password'])
     return None
 
+
+def job():
+    pre = load_pre()
+    chats = load_chats()
+    for chat in pre:
+        a = 0
+        for check in pre[chat]["checked"]:
+            if check: a+=1
+        if a!=0:
+            print("pon")
+            chats[chat] = pre[chat]
+            del pre[chat]
+            save_pre(pre)
+            save_chats(chats)
+
+
+schedule.every().sunday.at("12:00").do(job)
+
+
+def run_schedule():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+
+thread = threading.Thread(target=run_schedule)
+thread.daemon = True
+thread.start()
+
+
 @app.route('/login', methods=['GET', 'POST'])
 @limiter.limit("5 per minute")
 def login():
@@ -117,13 +172,17 @@ def login():
         users = load_users()
         banlist = load_blacklist()
         for user_id, user in users.items():
-            if user['username'] == form.username.data and check_password_hash(user['password'], form.password.data) and not form.username.data in banlist['banlist']:
+            if user['username'] == form.username.data and check_password_hash(user['password'],
+                                                                              form.password.data) and not form.username.data in \
+                                                                                                          banlist[
+                                                                                                              'banlist']:
                 login_user(User(id=user_id, username=user['username'], password=user['password']))
                 session['user_id'] = user_id
                 return redirect(url_for('index'))
         if form.username.data in banlist['banlist']: return redirect(url_for('ban'))
         flash('Invalid username or password')
     return render_template('login.html', form=form)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -144,15 +203,18 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
 
+
 @app.route('/ban')
 def ban():
     return "You have been banned. You are so insignificant that you don't even have an html file allocated to you"
+
 
 @app.route('/')
 def index():
@@ -160,8 +222,23 @@ def index():
     return_chats = {}
     banlist = load_blacklist()
     for chat in chats:
-        return_chats[chat]=chats[chat]
+        return_chats[chat] = chats[chat]
     return render_template('index.html', chats=return_chats)
+
+
+@app.route('/pre')
+@login_required
+def pre():
+    chats = load_pre()
+    return_chats = {}
+    banlist = load_blacklist()
+    for chat in chats:
+        return_chats[chat] = chats[chat]
+    if current_user.username in admin:
+        return render_template('pre.html', chats=return_chats)
+    else:
+        return redirect(url_for('index'))
+
 
 @app.route('/article/<chat_id>', methods=['GET', 'POST'])
 @login_required
@@ -173,7 +250,27 @@ def chat(chat_id):
     form = MessageForm()
     banlist = load_blacklist()
     if current_user.username in banlist['banlist']: return redirect(url_for('ban'))
-    return render_template('chat.html', name=name, text=formated, chat=chats[chat_id], messages=messages, form=form, chat_id=chat_id)
+    return render_template('chat.html', name=name, text=formated, chat=chats[chat_id], messages=messages, form=form,
+                           chat_id=chat_id)
+
+
+@app.route('/show-pre/<chat_id>', methods=['GET', 'POST'])
+@login_required
+def showpre(chat_id):
+    chats = load_pre()
+    formated = markdown.markdown(chats[chat_id]["article"], extensions=['extra'])
+    name = markdown.markdown(chats[chat_id]["name"], extensions=['extra'])
+    checked = chats[chat_id]["checked"]
+    form = Pre()
+    banlist = load_blacklist()
+    if form.validate_on_submit() and current_user.username in admin:
+        chats[chat_id]["checked"][current_user.username] = form.check.data
+        save_pre(chats)
+        return redirect(url_for('pre'))
+    if current_user.username in banlist['banlist']: return redirect(url_for('ban'))
+    return render_template('showpre.html', checked=checked, name=name, text=formated, chat=chats[chat_id], form=form,
+                           chat_id=chat_id)
+
 
 @app.route('/create_article', methods=['GET', 'POST'])
 @login_required
@@ -181,15 +278,28 @@ def create_chat():
     banlist = load_blacklist()
     if current_user.username in banlist['banlist']: return redirect(url_for('ban'))
     form = ChatForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and current_user.username in admin:
         chats = load_chats()
         new_id = str(uuid.uuid1())
         chats[new_id] = {
             'name': form.name.data,
             'article': form.article.data,
+            'check': True,
             'owner': current_user.username
         }
         save_chats(chats)
+        return redirect(url_for('index'))
+    elif form.validate_on_submit():
+        chats = load_pre()
+        new_id = str(uuid.uuid1())
+        chats[new_id] = {
+            'name': form.name.data,
+            'article': form.article.data,
+            'check': False,
+            'owner': current_user.username,
+            'checked': {}
+        }
+        save_pre(chats)
         return redirect(url_for('index'))
     return render_template('create_chat.html', form=form)
 
@@ -197,6 +307,7 @@ def create_chat():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
 
 @app.route('/@bm1n', methods=['GET', 'POST'])
 @login_required
@@ -213,6 +324,7 @@ def admin_page():
     else:
         return redirect(url_for('index'))
 
+
 @app.route('/delete_chat', methods=['GET', 'POST'])
 @login_required
 def delete_chat():
@@ -222,8 +334,10 @@ def delete_chat():
     if (request.args.get('id')):
         form.chat_id.data = request.args.get('id')
     chats = load_chats()
+    pre = load_pre()
     if form.validate_on_submit():
-        if (form.chat_id.data in chats and chats[form.chat_id.data]['owner'] == current_user.username) or current_user.username in admin:
+        if (form.chat_id.data in chats and chats[form.chat_id.data][
+            'owner'] == current_user.username) or current_user.username in admin:
             del chats[form.chat_id.data]
             save_chats(chats)
             messages = load_messages()
@@ -234,7 +348,19 @@ def delete_chat():
                 return redirect(url_for(request.args.get('url')))
             else:
                 return redirect(url_for('index'))
+        if form.chat_id.data in pre and current_user.username in admin:
+            del pre[form.chat_id.data]
+            save_pre(pre)
+            messages = load_messages()
+            if form.chat_id.data in messages:
+                del messages[form.chat_id.data]
+                save_messages(messages)
+            if request.args.get('url'):
+                return redirect(url_for(request.args.get('url')))
+            else:
+                return redirect(url_for('index'))
     return render_template('delete_chat.html', form=form)
+
 
 # Handle file uploads
 @app.route('/upload', methods=['POST'])
@@ -252,6 +378,7 @@ def upload():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         return redirect(url_for('index'))
 
+
 @socketio.on('send_message')
 def handle_send_message_event(data):
     app.logger.info(f"{data['username']} has sent message to the room {data['room']}: {data['message']}")
@@ -266,17 +393,20 @@ def handle_send_message_event(data):
     save_messages(messages)
     emit('receive_message', data, room=data['room'])
 
+
 @socketio.on('join_room')
 def handle_join_room_event(data):
     app.logger.info(f"{data['username']} has joined the room {data['room']}")
     join_room(data['room'])
     emit('join_room_announcement', data, room=data['room'])
 
+
 @socketio.on('leave_room')
 def handle_leave_room_event(data):
     app.logger.info(f"{data['username']} has left the room {data['room']}")
     leave_room(data['room'])
     emit('leave_room_announcement', data, room=data['room'])
+
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=80, allow_unsafe_werkzeug=True)

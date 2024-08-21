@@ -8,5 +8,10 @@
         "username": "kjhrd",
         "password": "scrypt:32768:8:1$2kxRnZ7atKvlj3Gj$70e773a5ebc4200a72263b9ba3fdc084730eb638d54d505c731107ca5c1b56bb58bbc8ff4757d599923cf0dfc3ada93dea6f46b34fe369211d2136a467a6a2c6",
         "ip": "192.168.0.110"
+    },
+    "45a113ac-c7f2-30b0-90a5-a399ab912716": {
+        "username": "test",
+        "password": "scrypt:32768:8:1$0xCYNC0R27mQ81OU$c2ed9b60d0bf5d4501afb2c1a3723b1f95e37af488d0cc3917686ff4f65b7d6f458f2dd7a2a97d6743b0dac96956636c724a9768f69d69c1072222db7bbaacf1",
+        "ip": "192.168.0.110"
     }
 }

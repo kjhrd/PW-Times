@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="art">
+<h1 style="padding-top: 10px; margin-left:10px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">{{ name|safe }}</h1>
+    <div class="pon" style="white-space: pre-line;">
+        {{ text|safe }}
+    </div>
+</div>
+<em>Статью написал {{ chat.owner }}</em>
+<br>
+<br>
+<br>
+<br>
+    Оценки:
+<br>
+<br>
+    {% for user in checked %}
+        <b style="font-size:24px ;display: inline;" >{{ user }}</b><p style="display: inline;"> : {{ checked[user] }}</p>
+    {% endfor %}
+<br>
+<br>
+<form method="POST" action="{{  url_for('showpre', chat_id=chat_id) }}">
+    {{ form.hidden_tag() }}
+    {{ form.check.label }} {{ form.check() }}<br>
+    {{ form.submit() }}
+</form>
+{% endblock %}

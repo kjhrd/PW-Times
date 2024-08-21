@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<h1>Здесь будут отображаться пользовательские статьи</h1>
+<div class="chats">
+<h2>Статьи:</h2>
+<br>
+{% for chat_id, chat in chats.items() %}
+    <a class="button" href="{{ url_for('showpre', chat_id=chat_id) }}">{{ chat.name|safe }}</a>
+{% endfor %}
+</div>
+</ul>
+{% endblock %}

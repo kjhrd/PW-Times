@@ -48,7 +48,7 @@ limiter = Limiter(
     default_limits=["200 per day", "50 per hour"],
     storage_uri="memory://",
 )
-admin = ["kjhrd", "gbkjn"]
+admin = ["kjhrd", "Gbkjn_", "PLAYER", "SudakEpta", "DonSaleri", "", ""]
 
 login_manager = LoginManager()
 login_manager.init_app(app)

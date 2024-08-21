@@ -32,6 +32,10 @@ ul {
     flex-wrap: wrap
 }
 
+h1 {
+    color: #aaa;
+}
+
 ul li {
     background-color: #555;
     margin-bottom: 10px;
@@ -241,6 +245,14 @@ main {
 
 .part img{
     margin-right: 10px;
+}
+
+.part p{
+   margin: 0;
+   position: absolute;
+   top: 50%;
+   transform: translate(0, -50%);
+   color: #aa1111;
 }
 
 html::-webkit-scrollbar {

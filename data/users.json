@@ -1,17 +1,12 @@
 {
-    "8cca297e-c9ba-312a-8a9d-7a8c60d90373": {
-        "username": "gbkjn",
-        "password": "scrypt:32768:8:1$hPHK4vbVnrylLDfV$de280bb7d8c5d188413d26d250f1f3f32ab6f3ec2f97a68c6f5eb3813a496795d32a412b966c97833a60ae95e186b762306afb9bb74cfedaea049902bd6e8333",
-        "ip": "26.105.220.153"
-    },
     "d6061fcf-f1e8-32ab-a50e-5e9338c95e6a": {
         "username": "kjhrd",
         "password": "scrypt:32768:8:1$2kxRnZ7atKvlj3Gj$70e773a5ebc4200a72263b9ba3fdc084730eb638d54d505c731107ca5c1b56bb58bbc8ff4757d599923cf0dfc3ada93dea6f46b34fe369211d2136a467a6a2c6",
         "ip": "192.168.0.110"
     },
-    "45a113ac-c7f2-30b0-90a5-a399ab912716": {
-        "username": "test",
-        "password": "scrypt:32768:8:1$0xCYNC0R27mQ81OU$c2ed9b60d0bf5d4501afb2c1a3723b1f95e37af488d0cc3917686ff4f65b7d6f458f2dd7a2a97d6743b0dac96956636c724a9768f69d69c1072222db7bbaacf1",
-        "ip": "192.168.0.110"
+    "b48b68a8-9bdd-3007-86be-492dd5bf8dc8": {
+        "username": "Gbkjn_",
+        "password": "scrypt:32768:8:1$WfdsT4roLHElJFtr$2654707d0a3f973a104ec8b1b422c998ad4f6d70eb0979f790422e57f1c0f06109163f9742f7d1a096d8407e6da7df1446101807e2c4bcb10169a1188bb2c666",
+        "ip": "26.105.220.153"
     }
 }
